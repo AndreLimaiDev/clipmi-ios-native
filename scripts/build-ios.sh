@@ -88,8 +88,9 @@ step_sources() {
 }
 
 step_freetype() {
+    # -Dhvf=disabled: dukungan HVF Apple (otomatis di darwin) butuh libhvf sistem, simbol HVF_* tidak bisa ditaut aplikasi.
     meson_build $FREETYPE -Dbrotli=disabled -Dbzip2=disabled -Dharfbuzz=disabled -Dpng=disabled \
-        -Dzlib=disabled -Dtests=disabled -Dmmap=enabled
+        -Dzlib=disabled -Dtests=disabled -Dmmap=enabled -Dhvf=disabled
 }
 
 step_fribidi() {
