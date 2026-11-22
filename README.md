@@ -8,7 +8,7 @@ FFmpeg 8.1.3 + libass untuk aplikasi ClipMI iOS, dibangun sebagai satu library s
 - iOS tidak mengizinkan aplikasi menjalankan program lain, jadi `fftools/ffmpeg.c` dikompilasi sebagai fungsi:
   `clipmi_ffmpeg_run(argc, argv, directory, log_path)` dan `clipmi_ffmpeg_cancel()` ([src/clipmi_ffmpeg.h](src/clipmi_ffmpeg.h)).
   Patch-nya kecil dan ada di `patch_fftools` ([scripts/build-ios.sh](scripts/build-ios.sh)).
-- Header FreeType ikut disertakan (pengukuran lebar teks).
+- Header FreeType dan libass ikut disertakan (pengukuran lebar teks dan pratinjau subtitle di aplikasi).
 
 | Komponen | Versi | Lisensi |
 |---|---|---|

@@ -214,6 +214,8 @@ step_package() {
     # Header: API pembungkus dan FreeType (dipakai aplikasi untuk mengukur lebar teks seperti ClipMI Android).
     cp "$ROOT/src/clipmi_ffmpeg.h" "$pkg/include/"
     cp -R "$PREFIX/include/freetype2/." "$pkg/include/"
+    # libass (pratinjau subtitle di aplikasi memakai libass yang sama dengan filter ass FFmpeg).
+    cp -R "$PREFIX/include/ass" "$pkg/include/"
     cat > "$pkg/include/module.modulemap" <<'EOF'
 module ClipMIFFmpeg {
     header "clipmi_ffmpeg.h"
