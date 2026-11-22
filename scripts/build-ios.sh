@@ -146,6 +146,8 @@ patch_fftools() {
         -e 's/^static atomic_int transcode_init_done = 0;$/atomic_int transcode_init_done = 0;/' \
         -e 's/^static volatile int ffmpeg_exited = 0;$/volatile int ffmpeg_exited = 0;/' \
         "$file"
+    # Prototipe (FFmpeg memakai -Werror=missing-prototypes).
+    perl -pi -e 's{^int clipmi_ffmpeg_main\(int argc, char \*\*argv\)$}{int clipmi_ffmpeg_main(int argc, char **argv);\nint clipmi_ffmpeg_main(int argc, char **argv)}' "$file"
     # Program ffmpeg tetap bisa ditaut (memastikan semua objek lengkap) lewat main kecil di file terpisah, yang
     # tidak ikut masuk library (aplikasi punya main sendiri).
     printf 'int clipmi_ffmpeg_main(int argc, char **argv);\nint main(int argc, char **argv) { return clipmi_ffmpeg_main(argc, argv); }\n' \
