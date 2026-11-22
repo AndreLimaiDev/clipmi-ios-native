@@ -1,0 +1,49 @@
+# Membangun ClipMIFFmpeg.xcframework di macOS. Push ke main: artifact saja. Tag v*: rilis GitHub berisi zip + sha256.
+name: Build xcframework
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Alat build
+        run: |
+          python3 -m pip install --break-system-packages meson ninja
+          brew list pkg-config >/dev/null 2>&1 || brew install pkg-config
+          xcodebuild -version
+          meson --version
+
+      - name: Cache tarball sumber
+        uses: actions/cache@v4
+        with:
+          path: build/src
+          key: src-${{ hashFiles('scripts/sources.sh') }}
+
+      - name: Build
+        run: bash scripts/build-ios.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClipMIFFmpeg.xcframework
+          path: |
+            dist/ClipMIFFmpeg.xcframework.zip
+            dist/ClipMIFFmpeg.xcframework.zip.sha256
+
+      - name: Rilis
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/ClipMIFFmpeg.xcframework.zip dist/ClipMIFFmpeg.xcframework.zip.sha256 \
+            --title "ClipMIFFmpeg ${GITHUB_REF_NAME}" --notes-file RELEASE.md
